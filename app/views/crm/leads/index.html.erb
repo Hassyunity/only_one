@@ -1,0 +1,39 @@
+<% content_for :title, "CRM Leads — #{company_name}" %>
+
+<%= render "shared/hero",
+      kicker: "Commercial",
+      title: "Pipeline commercial",
+      subtitle: @summary,
+      meta_pills: @hero_meta_pills,
+      ring_pct: @closing_rate,
+      ring_label: "Taux de clôture",
+      ring_sub: "#{Lead.gagne.count} deals gagnés",
+      icon: :crm %>
+
+<div style="padding:var(--space-6);display:flex;flex-direction:column;gap:var(--space-4);">
+  <div style="display:flex;justify-content:flex-end;align-items:flex-end;flex-wrap:wrap;gap:var(--space-3);">
+    <div style="display:flex;gap:var(--space-3);align-items:center;flex-wrap:wrap;">
+      <div style="display:flex;gap:var(--space-2);">
+        <% @filters.each do |f| %>
+          <%= link_to f[:label], crm_leads_path(filter: f[:id]), class: "tag #{@filter == f[:id] ? "is-active" : "is-inactive"}" %>
+        <% end %>
+      </div>
+      <div data-controller="toggle" style="display:contents;">
+        <button type="button" class="btn btn-primary" data-action="click->toggle#open">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+          Nouveau lead
+        </button>
+        <%= render "modal", lead: @new_lead, commercial_employees: @commercial_employees %>
+      </div>
+    </div>
+  </div>
+  <div class="hr" style="margin:0;"></div>
+  <div data-controller="kanban"
+       data-kanban-move-url-template-value="<%= move_crm_lead_path(id: "__ID__") %>"
+       data-kanban-filter-value="<%= @filter %>"
+       style="display:flex;gap:var(--space-4);overflow-x:auto;padding-bottom:var(--space-3);align-items:flex-start;">
+    <% @columns.each do |column| %>
+      <%= render "column", column: column %>
+    <% end %>
+  </div>
+</div>

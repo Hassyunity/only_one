@@ -1,0 +1,23 @@
+<div draggable="true" data-action="dragstart->kanban#dragStart" data-kanban-id-param="<%= lead.id %>" class="card elev-sm" style="cursor:grab;gap:6px;">
+  <% if lead.tags.present? %>
+    <div style="display:flex;gap:4px;flex-wrap:wrap;">
+      <% lead.tags.each do |tag| %>
+        <span style="background:<%= tag["color"] %>;color:var(--color-bg);font-size:10px;letter-spacing:.02em;padding:2px 8px;"><%= tag["label"] %></span>
+      <% end %>
+    </div>
+  <% end %>
+  <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;">
+    <div class="card-title" style="font-size:14px;"><%= lead.name %></div>
+    <span class="<%= lead.owner_tag_class %>"><%= lead.owner_type.capitalize %></span>
+  </div>
+  <div class="card-body" style="font-size:12px;"><%= lead.company %></div>
+  <div class="card-meta">
+    <span><%= format_money(lead.value) %></span><span>·</span><span><%= lead.owner_name %></span>
+    <% if lead.tasks? %>
+      <span style="display:inline-flex;align-items:center;gap:3px;margin-left:4px;">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="6" height="6" rx="0"/><path d="m3 17 2 2 4-4"/><path d="M13 6h8"/><path d="M13 12h8"/><path d="M13 18h8"/></svg>
+        <%= lead.tasks_label %>
+      </span>
+    <% end %>
+  </div>
+</div>

@@ -1,0 +1,33 @@
+<div id="add-lead-modal" class="dialog-backdrop" data-toggle-target="panel" data-action="click->toggle#closeOnBackdrop" <%= "hidden" unless local_assigns[:open] %>>
+  <div class="dialog">
+    <div class="dialog-title">Nouveau lead</div>
+    <%= form_with model: lead, url: crm_leads_path, data: { turbo_stream: true } do |f| %>
+      <div class="dialog-body" style="display:flex;flex-direction:column;gap:var(--space-3);">
+        <% if lead.errors.any? %>
+          <p style="color:var(--color-accent);font-size:13px;margin:0;"><%= lead.errors.full_messages.to_sentence %></p>
+        <% end %>
+        <%= hidden_field_tag :filter, @filter %>
+        <div class="field"><label>Nom du prospect</label><%= f.text_field :name, class: "input", required: true %></div>
+        <div class="field"><label>Entreprise</label><%= f.text_field :company, class: "input", required: true %></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-3);">
+          <div class="field"><label>Valeur estimée (€)</label><%= f.number_field :value, class: "input" %></div>
+          <div class="field">
+            <label>Commercial assigné</label>
+            <%= f.select :employee_id, commercial_employees.map { |e| [ e.name, e.id ] }, { include_blank: "Non assigné" }, class: "input" %>
+          </div>
+        </div>
+        <div class="field">
+          <label>Type</label>
+          <div class="seg">
+            <label class="seg-opt"><%= f.radio_button :owner_type, "setter", checked: lead.owner_type != "closer" %>Setter</label>
+            <label class="seg-opt"><%= f.radio_button :owner_type, "closer" %>Closer</label>
+          </div>
+        </div>
+      </div>
+      <div class="dialog-actions">
+        <button type="button" class="btn btn-secondary" data-action="click->toggle#close">Annuler</button>
+        <%= f.submit "Ajouter le lead", class: "btn btn-primary" %>
+      </div>
+    <% end %>
+  </div>
+</div>

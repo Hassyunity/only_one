@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= content_for(:title) || "#{company_name} — Plateforme interne" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= yield :head %>
+
+    <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
+    <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
+
+    <link rel="icon" href="/icon.png" type="image/png">
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/icon.png">
+
+    <%# Includes all stylesheet files in app/assets/stylesheets %>
+    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <body>
+    <div style="min-height:100vh;background:var(--color-bg);color:var(--color-text);font-family:var(--font-body);">
+      <% if Current.user %>
+        <nav class="nav">
+          <span class="nav-brand"><%= company_name %></span>
+          <div class="nav-tabs">
+            <% Current.user.nav_tabs.each do |tab| %>
+              <%= link_to tab[:label], tab[:path], class: "nav-tab #{"is-active" if current_page?(tab[:path])}" %>
+            <% end %>
+          </div>
+          <div class="nav-actions">
+            <%= button_to "Changer de profil", session_path, method: :delete, class: "btn btn-ghost" %>
+            <span class="nav-avatar"><%= Current.user.initials %></span>
+          </div>
+        </nav>
+      <% end %>
+      <%= yield %>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,5 @@
+<% columns.each do |column| %>
+  <%= turbo_stream.replace "studio-column-#{column[:id]}" do %>
+    <%= render "studio/projects/column", column: column %>
+  <% end %>
+<% end %>

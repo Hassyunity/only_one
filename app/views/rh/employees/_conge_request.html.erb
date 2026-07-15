@@ -1,0 +1,16 @@
+<div id="conge-request-<%= c.id %>" style="border-bottom:1px solid var(--color-divider);padding-bottom:var(--space-3);">
+  <div style="display:flex;justify-content:space-between;gap:6px;"><strong style="font-size:13px;"><%= c.employee.name %></strong><span class="<%= c.status_tag_class %>"><%= c.status_label %></span></div>
+  <div class="text-muted" style="font-size:12px;margin-top:3px;"><%= c.leave_type %> · <%= c.dates_label %></div>
+  <% if c.en_attente? %>
+    <div style="display:flex;gap:var(--space-2);margin-top:var(--space-2);">
+      <%= button_to approve_rh_conge_request_path(c), method: :patch, form: { data: { turbo_stream: true } }, class: "btn btn-secondary", style: "font-size:11px;padding:4px 10px;" do %>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+        Approuver
+      <% end %>
+      <%= button_to reject_rh_conge_request_path(c), method: :patch, form: { data: { turbo_stream: true } }, class: "btn btn-ghost", style: "font-size:11px;padding:4px 10px;" do %>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="M6 6l12 12"/></svg>
+        Refuser
+      <% end %>
+    </div>
+  <% end %>
+</div>

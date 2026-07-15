@@ -1,0 +1,5 @@
+<div draggable="true" data-action="dragstart->kanban#dragStart" data-kanban-id-param="<%= project.id %>" class="card elev-sm" style="cursor:grab;gap:6px;">
+  <div class="card-title" style="font-size:14px;"><%= project.name %></div>
+  <div class="card-body" style="font-size:12px;"><%= project.client %></div>
+  <div class="card-meta"><span><%= project.designer_name %></span><span>·</span><span>Échéance <%= project.deadline_label %></span></div>
+</div>

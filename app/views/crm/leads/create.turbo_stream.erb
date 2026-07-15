@@ -1,0 +1,10 @@
+<% if @new_lead.persisted? %>
+  <%= render "refresh_columns", columns: [ @refreshed_column ] %>
+  <%= turbo_stream.replace "add-lead-modal" do %>
+    <%= render "modal", lead: Lead.new(owner_type: "setter"), commercial_employees: @commercial_employees %>
+  <% end %>
+<% else %>
+  <%= turbo_stream.replace "add-lead-modal" do %>
+    <%= render "modal", lead: @new_lead, commercial_employees: @commercial_employees, open: true %>
+  <% end %>
+<% end %>

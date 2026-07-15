@@ -1,0 +1,62 @@
+<% content_for :title, "Ressources humaines — #{company_name}" %>
+
+<%= render "shared/hero",
+      kicker: "Personnel",
+      title: "Ressources humaines",
+      subtitle: @headcount_label,
+      meta_pills: @hero_meta_pills,
+      ring_pct: @presence_rate,
+      ring_label: "Taux de présence",
+      ring_sub: "#{Employee.actif.count}/#{Employee.count} actifs",
+      icon: :rh %>
+
+<div style="padding:var(--space-6);max-width:1300px;margin:0 auto;display:flex;flex-direction:column;gap:var(--space-4);">
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:var(--space-4);">
+    <% @dept_breakdown.each do |d| %>
+      <div class="card elev-sm">
+        <div class="card-kicker"><%= d[:label] %></div>
+        <div class="card-title" style="font-size:27px;"><%= d[:count] %></div>
+        <div class="card-meta">collaborateurs</div>
+      </div>
+    <% end %>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1.6fr 1fr;gap:var(--space-4);align-items:start;">
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;gap:var(--space-3);align-items:center;margin-bottom:var(--space-3);flex-wrap:wrap;">
+        <div class="card-title">Annuaire</div>
+        <%= form_with url: rh_employees_path, method: :get, style: "display:contents;" do %>
+          <% if @dept_filter != "tous" %><input type="hidden" name="dept" value="<%= @dept_filter %>"><% end %>
+          <input class="input" name="q" value="<%= @search %>" placeholder="Rechercher un collaborateur…" style="max-width:220px;">
+        <% end %>
+      </div>
+      <div style="display:flex;gap:var(--space-2);flex-wrap:wrap;margin-bottom:var(--space-3);">
+        <% @dept_filters.each do |f| %>
+          <%= link_to f[:label], rh_employees_path(dept: f[:id], q: @search.presence), class: "tag #{@dept_filter == f[:id] ? "is-active" : "is-inactive"}" %>
+        <% end %>
+      </div>
+      <table class="table">
+        <thead><tr><th>Nom</th><th>Pôle</th><th>Rôle</th><th>Statut</th></tr></thead>
+        <tbody>
+          <% @employees.each do |e| %>
+            <tr>
+              <td><%= e.name %></td>
+              <td><%= e.department_label %></td>
+              <td><%= e.job_title %></td>
+              <td><span class="<%= e.status_tag_class %>"><%= e.status_label %></span></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Demandes de congés</div>
+      <div style="display:flex;flex-direction:column;gap:var(--space-3);margin-top:var(--space-3);">
+        <% @conge_requests.each do |c| %>
+          <%= render "conge_request", c: c %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

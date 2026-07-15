@@ -1,0 +1,23 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  company: MyString
+  value: 1
+  stage: MyString
+  owner_type: MyString
+  employee: one
+  tags: 
+  tasks_done: 1
+  tasks_total: 1
+
+two:
+  name: MyString
+  company: MyString
+  value: 1
+  stage: MyString
+  owner_type: MyString
+  employee: two
+  tags: 
+  tasks_done: 1
+  tasks_total: 1

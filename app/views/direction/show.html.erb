@@ -1,0 +1,89 @@
+<% content_for :title, "Direction — #{company_name}" %>
+
+<%= render "shared/hero",
+      kicker: "Pilotage",
+      title: "Vue d'ensemble",
+      subtitle: "Suivi consolidé de l'activité #{company_name}.",
+      meta_pills: @hero_meta_pills,
+      primary_action: { label: "Nouveau lead", url: crm_leads_path },
+      secondary_action: { label: "Ressources humaines", url: rh_employees_path },
+      ring_pct: @closing_rate,
+      ring_label: "Taux de clôture",
+      ring_sub: "#{format_money(@won_leads.sum(:value))} gagnés",
+      icon: :direction %>
+
+<div style="padding:var(--space-6) var(--space-6) var(--space-8);max-width:1400px;margin:0 auto;display:flex;flex-direction:column;gap:var(--space-6);">
+  <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:var(--space-4);">
+    <% @kpis.each do |k| %>
+      <div class="card elev-sm">
+        <div class="card-kicker"><%= k[:label] %></div>
+        <div class="card-title" style="font-size:27px;"><%= k[:value] %></div>
+        <div class="card-meta"><%= k[:sub] %></div>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="hr" style="margin:0;"></div>
+
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-4);align-items:start;">
+    <div class="card" style="background:var(--color-accent-2-100);">
+      <div class="card-kicker">Effectif</div>
+      <div class="card-title">Répartition par pôle</div>
+      <div style="display:flex;flex-direction:column;gap:var(--space-4);margin-top:var(--space-3);">
+        <% @dept_breakdown.each do |d| %>
+          <div>
+            <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:5px;"><span><%= d[:label] %></span><span class="text-muted"><%= d[:count] %></span></div>
+            <div style="height:7px;background:color-mix(in srgb, var(--color-accent-2-800) 15%, transparent);border-radius:var(--radius-pill);"><div style="height:100%;background:var(--color-accent-2-600);width:<%= d[:pct] %>;border-radius:var(--radius-pill);"></div></div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-kicker">Chiffre d'affaires</div>
+      <div class="card-title">CA gagné — 6 derniers mois</div>
+      <div style="display:flex;align-items:flex-end;gap:var(--space-2);height:140px;margin-top:var(--space-4);">
+        <% @revenue_bars.each do |b| %>
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:var(--space-2);height:100%;justify-content:flex-end;">
+            <div style="font-size:10px;opacity:.6;"><%= b[:value_label] %></div>
+            <div style="width:100%;background:var(--color-accent);height:<%= b[:height] %>;border-radius:6px 6px 0 0;"></div>
+            <div style="font-size:10px;opacity:.6;"><%= b[:month] %></div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="card" style="background:var(--color-blue-100);">
+      <div class="card-kicker">Commercial</div>
+      <div class="card-title">Pipeline par étape</div>
+      <div style="display:flex;flex-direction:column;gap:var(--space-3);margin-top:var(--space-3);">
+        <% @stage_breakdown.each do |s| %>
+          <div>
+            <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;"><span><%= s[:label] %> · <%= s[:count] %></span><span class="text-muted"><%= s[:sum_label] %></span></div>
+            <div style="height:7px;background:color-mix(in srgb, var(--color-blue-800) 12%, transparent);border-radius:var(--radius-pill);"><div style="height:100%;background:var(--color-blue-800);width:<%= s[:pct] %>;border-radius:var(--radius-pill);"></div></div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <div class="hr" style="margin:0;"></div>
+  <h3 style="margin:0;">Modules</h3>
+  <div class="hscroll">
+    <%= link_to crm_leads_path, class: "hscroll-card" do %>
+      <div class="card-kicker">CRM Leads</div>
+      <div class="card-title"><%= @crm_module_stat %></div>
+      <p class="card-body">Prospects en cours de traitement</p>
+    <% end %>
+    <%= link_to studio_projects_path, class: "hscroll-card" do %>
+      <div class="card-kicker">Studio digital</div>
+      <div class="card-title"><%= @studio_module_stat %></div>
+      <p class="card-body">Projets créatifs actifs</p>
+    <% end %>
+    <%= link_to dev_tickets_path, class: "hscroll-card" do %>
+      <div class="card-kicker">Développeurs</div>
+      <div class="card-title"><%= @dev_module_stat %></div>
+      <p class="card-body">Tickets ouverts sur le sprint</p>
+    <% end %>
+  </div>
+</div>

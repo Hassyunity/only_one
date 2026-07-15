@@ -1,0 +1,46 @@
+<div id="crm-column-<%= column[:id] %>" data-controller="toggle">
+  <button type="button" data-toggle-target="alt" data-action="click->toggle#open" hidden
+    style="flex:none;width:40px;min-height:220px;background:var(--color-surface);border:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:var(--space-3);padding:var(--space-3) 0;font:inherit;color:inherit;">
+    <span class="tag tag-neutral"><%= column[:count] %></span>
+    <span style="writing-mode:vertical-rl;transform:rotate(180deg);font-family:var(--font-heading);font-weight:800;font-size:12px;text-transform:uppercase;letter-spacing:.04em;"><%= column[:label] %></span>
+  </button>
+
+  <div data-toggle-target="panel"
+       data-action="dragover->kanban#dragOver drop->kanban#drop"
+       data-kanban-stage-param="<%= column[:id] %>"
+       style="min-width:250px;width:250px;flex:none;display:flex;flex-direction:column;gap:var(--space-3);background:var(--color-surface);padding:var(--space-3);">
+    <div style="display:flex;justify-content:space-between;align-items:baseline;">
+      <div style="font-family:var(--font-heading);font-weight:800;font-size:12px;text-transform:uppercase;letter-spacing:.04em;"><%= column[:label] %></div>
+      <div style="display:flex;align-items:center;gap:var(--space-2);">
+        <span class="tag tag-neutral"><%= column[:count] %></span>
+        <button type="button" data-action="click->toggle#close" aria-label="Réduire la liste" style="background:none;border:none;cursor:pointer;padding:2px;color:inherit;display:flex;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+        </button>
+      </div>
+    </div>
+    <div class="text-muted" style="font-size:11px;margin-top:-8px;"><%= column[:sum_label] %></div>
+    <div style="display:flex;flex-direction:column;gap:var(--space-2);min-height:40px;">
+      <%= render partial: "crm/leads/card", collection: column[:leads], as: :lead %>
+    </div>
+
+    <div data-controller="toggle">
+      <button type="button" data-toggle-target="alt" data-action="click->toggle#open" class="btn btn-ghost btn-block" style="justify-content:flex-start;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+        Ajouter une carte
+      </button>
+      <div data-toggle-target="panel" hidden style="display:flex;flex-direction:column;gap:var(--space-2);">
+        <%= form_with url: quick_add_crm_leads_path, method: :patch, data: { turbo_stream: true } do |f| %>
+          <%= hidden_field_tag :stage, column[:id] %>
+          <%= hidden_field_tag :filter, @filter %>
+          <textarea name="name" class="input" rows="2" placeholder="Nom du prospect…"></textarea>
+          <div style="display:flex;gap:var(--space-2);">
+            <%= f.submit "Ajouter", class: "btn btn-primary", style: "font-size:12px;" %>
+            <button type="button" class="btn btn-ghost" data-action="click->toggle#close" style="font-size:12px;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="M6 6l12 12"/></svg>
+            </button>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

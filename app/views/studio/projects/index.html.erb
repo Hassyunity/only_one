@@ -1,0 +1,22 @@
+<% content_for :title, "Studio digital — #{company_name}" %>
+
+<%= render "shared/hero",
+      kicker: "Créatif",
+      title: "Studio digital",
+      subtitle: @summary,
+      meta_pills: @hero_meta_pills,
+      ring_pct: @delivery_rate,
+      ring_label: "Livrés",
+      ring_sub: "#{StudioProject.livre.count}/#{StudioProject.count} projets",
+      icon: :studio %>
+
+<div style="padding:var(--space-6);display:flex;flex-direction:column;gap:var(--space-4);">
+  <div data-controller="kanban"
+       data-kanban-move-url-template-value="<%= move_studio_project_path(id: "__ID__") %>"
+       data-kanban-filter-value=""
+       style="display:flex;gap:var(--space-4);overflow-x:auto;padding-bottom:var(--space-3);">
+    <% @columns.each do |column| %>
+      <%= render "column", column: column %>
+    <% end %>
+  </div>
+</div>

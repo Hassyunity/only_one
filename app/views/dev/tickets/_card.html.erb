@@ -1,0 +1,7 @@
+<div draggable="true" data-action="dragstart->kanban#dragStart" data-kanban-id-param="<%= ticket.id %>" class="card elev-sm" style="cursor:grab;gap:6px;">
+  <div style="display:flex;justify-content:space-between;align-items:center;gap:6px;">
+    <div class="card-title" style="font-size:13px;"><%= ticket.title %></div>
+    <span class="<%= ticket.priority_tag_class %>"><%= ticket.priority.capitalize %></span>
+  </div>
+  <div class="card-meta"><span><%= ticket.assignee_name %></span><span>·</span><span><%= ticket.sprint %></span></div>
+</div>
